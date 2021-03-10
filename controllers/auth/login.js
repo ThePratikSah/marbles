@@ -35,6 +35,10 @@ exports.login = async (req, res, next) => {
     });
     res.status(200).json({
       token: token,
+      userName:loadedUser.userName,
+      type:loadedUser.authType,
+      
+
     });
   } catch (err) {
     if (!err.statusCode) {

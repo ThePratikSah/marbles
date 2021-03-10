@@ -11,6 +11,7 @@ exports.register = async (req, res, next) => {
   }
   try {
     const {userName, email, password, authType} = req.body;
+     let authCode;
     const userExist = await User.findOne({
       where: {
         [Op.or]: [{userName}, {email}]
@@ -21,6 +22,8 @@ exports.register = async (req, res, next) => {
       error.statusCode = 422;
       return next(error);
     }
+   
+    
     const hashedPwd = await bcrypt.hash(password, 12);
     await User.create({userName, email, password: hashedPwd, authType});
     res.status(201).json({
