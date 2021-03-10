@@ -1,12 +1,12 @@
 const fs = require("fs");
 const express = require("express");
-const path = require('path');
-const multer = require('multer');
+const path = require("path");
+const multer = require("multer");
 const sequelize = require("./util/database");
-const helmet = require('helmet');
-const compression = require('compression');
+const helmet = require("helmet");
+const compression = require("compression");
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
@@ -50,16 +50,21 @@ const fileStorage = multer.diskStorage({
     cb(null, dir);
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname.toString().replace(/\s/g, '-'));
+    cb(
+      null,
+      new Date().toISOString().replace(/:/g, "-") +
+        "-" +
+        file.originalname.toString().replace(/\s/g, "-")
+    );
   },
 });
 
 //multer file filter
 const fileFilter = (req, file, cb) => {
   if (
-    file.mimetype === 'image/jpg' ||
-    file.mimetype === 'image/png' ||
-    file.mimetype === 'image/jpeg'
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpeg"
   ) {
     cb(null, true);
   } else {
@@ -67,7 +72,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(__dirname));
 
@@ -76,10 +81,10 @@ app.use(
   multer({
     storage: fileStorage,
     fileFilter: fileFilter,
-  }).single('image'),
+  }).single("image")
 );
 
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 //handling the cors error here
 app.use(corsError.corsErr);
